@@ -20,14 +20,27 @@ public:
     if(pInstance==0) pInstance = new ROOTWriter();
     return pInstance;
   };
+
+  void Incr_energy_edept(G4double);
+
+  void Set_init_data(G4double);
+
+  void Refresh_data();
   
-  void Initialize(); // initialization method. Declare in ROOTWriter.cc
+  void Initialize(); 
   
   void Fill();    
   
   void Finalize();
   
 private:
+
+
+  TFile* output_file = 0;
+  TH2D*  energy_edeption_hist = 0;
+  
+  G4double real_particle_energy = 0;
+  G4double edepted_particle_energy = 0;
 
   static ROOTWriter* pInstance;
 

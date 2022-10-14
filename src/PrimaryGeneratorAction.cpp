@@ -18,16 +18,33 @@
 
 PrimaryGeneratorAction* PrimaryGeneratorAction::fPtr = 0;
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction(), fParticleGun(0) {
+PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code, G4double Energy)
+    : G4VUserPrimaryGeneratorAction(), fParticleGun(0) {
   
-  fPtr = this;
-  fParticleGun  = new G4ParticleGun(1);
+    fPtr = this;
+    particle_PDG_code = PDG_code;
+    particle_Energy   = Energy;
+    fParticleGun  = new G4ParticleGun(1);
+
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4ParticleDefinition* particle = particleTable->FindParticle(PDG_code);
+    fParticleGun->SetParticleDefinition(particle);
 
 };
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction(){
-  delete fParticleGun;
+    delete fParticleGun;
 };
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){};
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
+
+    fParticleGun->SetParticlePosition(G4ThreeVector(0,0,-10*cm));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
+    fParticleGun->SetParticleEnergy(particle_Energy);
+
+    ROOTWriter::GetPointer()->Set_init_data(particle_Energy);
+
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+    
+    return;
+};

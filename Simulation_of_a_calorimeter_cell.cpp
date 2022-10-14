@@ -19,6 +19,19 @@
 
 int main(int argc,char** argv)
 {
+
+  G4int     particle_PDG;
+  G4double  particle_Energy;
+
+  if (argc == 4){
+    particle_PDG    = atoi(argv[2]);
+    particle_Energy = atof(argv[3]) * GeV;
+    G4cout << "Particle_PDG = " << particle_PDG << "\n" <<
+      "Particle_Energy = " << particle_Energy << " MeV" << G4endl;
+  } else {
+    return -1;
+  }
+
   // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
@@ -34,9 +47,12 @@ int main(int argc,char** argv)
   physicsList->SetVerboseLevel(1);
   physicsList->RegisterPhysics(new G4OpticalPhysics);
   runManager->SetUserInitialization(physicsList);
+
+
     
   // User action initialization
-  runManager->SetUserAction(new PrimaryGeneratorAction());
+  runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
+                                                       particle_Energy));
   runManager->SetUserAction(new EventAction());  
   runManager->SetUserAction(new SteppingAction());
 
@@ -78,6 +94,7 @@ int main(int argc,char** argv)
   }
   
   ROOTWriter::GetPointer()->Finalize();
+  
   G4cout << "END OF PROGRAM!" << G4endl;
   
 #ifdef G4VIS_USE

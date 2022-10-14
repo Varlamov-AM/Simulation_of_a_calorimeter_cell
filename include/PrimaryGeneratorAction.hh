@@ -13,7 +13,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
 public:
 
-  PrimaryGeneratorAction();    
+  PrimaryGeneratorAction(G4int, G4double);    
 
   virtual ~PrimaryGeneratorAction();
   
@@ -28,6 +28,8 @@ private:
   
   static PrimaryGeneratorAction* fPtr;
   G4ParticleGun* fParticleGun;
+  G4int     particle_PDG_code;
+  G4double  particle_Energy;
   
 };
 
