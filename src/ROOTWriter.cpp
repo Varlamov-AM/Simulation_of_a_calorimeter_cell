@@ -16,12 +16,21 @@ void ROOTWriter::Initialize(){
     }
 
     if (energy_edeption_hist == 0){
-        energy_edeption_hist = 
-            new TH2D("Energy_edeption_in_calorimeter_cell",
-                     "Hadrons energy edeption in calorimeter cell in MeV",
-                     1000, 0., 1000., 
-                     1000, 0., 1000.);
+        const G4int nbinsy = 2500;
+        G4double* hist_bining = new G4double[nbinsy + 1];
+        for (G4int i= 0; i <= nbinsy; i++){
+            if (i <= 500){
+                hist_bining[i] = (1. / 500) * i;
+            } else {
+                hist_bining[i] = 1. + (49. / 2000) * (i - 500);
+            }
+        }
+        energy_edeption_hist = new TH2D("Energy_edeption_in_calorimeter_cell",
+                        "Hadrons energy edeption in calorimeter cell in GeV", 
+                        200, 0., 50.,
+                        nbinsy, hist_bining);
     }
+
 
     return;
 };
@@ -51,7 +60,7 @@ void ROOTWriter::Refresh_data(){
 void ROOTWriter::Fill(){
 
     energy_edeption_hist->
-        Fill(real_particle_energy, edepted_particle_energy);
+        Fill(real_particle_energy / GeV, edepted_particle_energy/ GeV);
     Refresh_data();
 
     return;
@@ -61,6 +70,9 @@ void ROOTWriter::Finalize(){
 
     output_file->cd();
     energy_edeption_hist->Write();
+
+    delete energy_edeption_hist;
+    delete output_file;
 
     return;
 };
