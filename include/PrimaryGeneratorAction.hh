@@ -6,6 +6,7 @@
 #include "globals.hh"
 #include "G4GeneralParticleSource.hh"
 #include "TF1.h"
+#include "TRandom.h"
 
 class G4Event;
 
@@ -13,7 +14,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
 public:
 
-  PrimaryGeneratorAction(G4int, G4double);    
+  PrimaryGeneratorAction(G4int);    
 
   virtual ~PrimaryGeneratorAction();
   
@@ -30,6 +31,7 @@ private:
   G4ParticleGun* fParticleGun;
   G4int     particle_PDG_code;
   G4double  particle_Energy;
+  TRandom* random_gen;
   
 };
 

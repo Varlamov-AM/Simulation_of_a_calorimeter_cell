@@ -17,19 +17,17 @@
 #include "G4SystemOfUnits.hh"
 #include "G4GeneralParticleSource.hh"
 
-int main(int argc,char** argv)
-{
-
+int main(int argc, char** argv){
+  
   G4int     particle_PDG;
   G4double  particle_Energy;
 
-  if (argc == 4){
+  if (argc == 3){
     particle_PDG    = atoi(argv[2]);
-    particle_Energy = atof(argv[3]) * GeV;
-    G4cout << "Particle_PDG = " << particle_PDG << "\n" <<
-      "Particle_Energy = " << particle_Energy << " MeV" << G4endl;
+    G4cout << "Particle_PDG = " << particle_PDG << G4endl;
   } else {
-    return -1;
+    particle_PDG = 11;
+    particle_Energy = 500 * MeV;
   }
 
   // Choose the Random engine
@@ -51,8 +49,7 @@ int main(int argc,char** argv)
 
     
   // User action initialization
-  runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
-                                                       particle_Energy));
+  runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG));
   runManager->SetUserAction(new EventAction());  
   runManager->SetUserAction(new SteppingAction());
 
