@@ -16,6 +16,8 @@ public:
 
   PrimaryGeneratorAction(G4int);    
 
+  PrimaryGeneratorAction(G4int, G4double);   
+
   virtual ~PrimaryGeneratorAction();
   
   virtual void GeneratePrimaries(G4Event*);         
@@ -31,6 +33,7 @@ private:
   G4ParticleGun* fParticleGun;
   G4int     particle_PDG_code;
   G4double  particle_Energy;
+  G4bool    Action_generator_mode;
   TRandom* random_gen;
   
 };

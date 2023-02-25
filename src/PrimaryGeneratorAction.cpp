@@ -32,6 +32,26 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code)
     random_gen = new TRandom();
     random_gen->SetSeed(0);
     particle_PDG_code = PDG_code;
+    Action_generator_mode = true;
+
+};
+
+PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code, G4double Particle_energy)
+    : G4VUserPrimaryGeneratorAction(), fParticleGun(0) {
+  
+    fPtr = this;
+    fParticleGun  = new G4ParticleGun(1);
+
+    particle_PDG_code = PDG_code;
+    particle_Energy = Particle_energy;
+
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4ParticleDefinition* particle = particleTable->FindParticle(PDG_code);
+    fParticleGun->SetParticleDefinition(particle);
+    fParticleGun->SetParticlePosition(G4ThreeVector(0,0,-10*cm));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
+    fParticleGun->SetParticleEnergy(particle_Energy);
+    Action_generator_mode = false;
 
 };
 
@@ -42,9 +62,11 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction(){
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 
+    if (Action_generator_mode){
+        particle_Energy = random_gen->Uniform(50.) * GeV;   
+        fParticleGun->SetParticleEnergy(particle_Energy);
+    } 
 
-    particle_Energy = random_gen->Uniform(50.) * GeV;
-    fParticleGun->SetParticleEnergy(particle_Energy);
 
     ROOTWriter::GetPointer()->Set_init_data(particle_Energy);
 
