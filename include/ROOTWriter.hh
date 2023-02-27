@@ -32,13 +32,23 @@ public:
   void Fill();    
   
   void Finalize();
-  
+
+  TRandom* rndm;
+
 private:
 
 
-  TFile* output_file = 0;
-  TH2D*  energy_edeption_hist = 0;
+  TFile* output_hist_file = 0;
+  TFile* output_tree_file = 0;
+
+  TTree* energy_tree = 0;
+
+  TH2D*  prime_edeption_hist = 0;
+  TH2D*  smear_edeption_hist = 0;
+  TH2D*  prime_optic_photons = 0;
+  TH2D*  smear_optic_photons = 0;
   
+  G4double optic_photons_energy_rate = 0.9; // MeV^{-1}
   G4double real_particle_energy = 0;
   G4double edepted_particle_energy = 0;
 
