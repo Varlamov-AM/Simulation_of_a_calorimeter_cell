@@ -39,28 +39,30 @@ int main(int argc, char** argv){
     G4int     particle_PDG;
     G4double  particle_Energy;
 
-    if (argc == 3){
-        particle_PDG    = atoi(argv[2]);
-        G4cout << "Particle_PDG = " << particle_PDG << G4endl;
-        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG));
-    } else if (argc == 4){
-        particle_PDG    = atoi(argv[2]);
-        G4cout << "Particle_PDG = " << particle_PDG << G4endl;
-        particle_Energy = atof(argv[3]) * GeV;
-        G4cout << 
-            "Particle Energy = " << particle_Energy << " MeV\n" << G4endl;
-        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG, 
-                                                            particle_Energy));
-    } else {
-        particle_PDG = 11;
-        particle_Energy = 500 * MeV;
-        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG, 
-                                                            particle_Energy));
-    }
-    
+   if (argc == 3){
+       particle_PDG    = atoi(argv[2]);
+       G4cout << "Particle_PDG = " << particle_PDG << G4endl;
+       runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG));
+   } else if (argc == 4){
+       particle_PDG    = atoi(argv[2]);
+       G4cout << "Particle_PDG = " << particle_PDG << G4endl;
+       particle_Energy = atof(argv[3]) * GeV;
+       G4cout <<
+           "Particle Energy = " << particle_Energy << " MeV\n" << G4endl;
+       runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
+                                                           particle_Energy));
+   } else {
+       particle_PDG = 11;
+       particle_Energy = 500 * MeV;
+       runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
+                                                           particle_Energy));
+   }
+
     // User action initialization
-    runManager->SetUserAction(new EventAction());  
+    runManager->SetUserAction(new EventAction());
     runManager->SetUserAction(new SteppingAction());
+    runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
+                                                         particle_Energy));
 
     // Initialize ROOT
     ROOTWriter::GetPointer()->Initialize();
