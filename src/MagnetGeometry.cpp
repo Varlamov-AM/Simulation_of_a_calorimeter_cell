@@ -10,7 +10,7 @@ MagnetGeometry::MagnetGeometry(G4int nPlates){
     platePositions.resize(nplates);
 
     for (auto copyNo=0; copyNo < nplates; copyNo++) {
-        platePositions[copyNo] = -25*cm + 0.21/2*cm + 2.5*cm*copyNo;
+        platePositions[copyNo] = -25*cm + 0.21*cm + 2.5*cm*copyNo;
     }
 
 }

@@ -30,8 +30,8 @@ G4VPhysicalVolume* Geometry::Construct(){
     G4Material* aluminium = DefineMaterial("Aluminium");
     G4Material* PbW04 = DefineMaterial("PbWO4");
 
-    G4double cell_x = 40*cm/2;
-    G4double cell_y = 40*cm/2;
+    G4double cell_x = 66*mm/2;
+    G4double cell_y = 66*mm/2;
     G4double cell_z  = 18*cm/2;
 
     G4double magnet_x = 40*cm/2;
@@ -40,7 +40,9 @@ G4VPhysicalVolume* Geometry::Construct(){
 
     G4double al_x = 40*cm/2;
     G4double al_y = 40*cm/2;
-    G4double al_z = 0.21*cm/2;
+    G4double al_z = 0.21*cm;
+
+    G4cout << al_z << "\n";
 
     // Create world
   
@@ -68,6 +70,8 @@ G4VPhysicalVolume* Geometry::Construct(){
     G4LogicalVolume* logic_magnet = 
         new G4LogicalVolume(solid_magnet, liquidHe, "Magnet");
 
+    G4cout << liquidHe << "\n";
+
     G4VPhysicalVolume* phys_magnet = 
         new G4PVPlacement(0, 
                           G4ThreeVector(0, 0, magnet_z), 
@@ -85,6 +89,8 @@ G4VPhysicalVolume* Geometry::Construct(){
 
     G4LogicalVolume* logic_plate = 
         new G4LogicalVolume(solid_plate, aluminium, "logic_al_plate");
+
+    G4cout << aluminium << "\n";
 
     G4VPVParameterisation* plates_parametrisation = 
         new MagnetGeometry(n_al_plates_in_magnet);
@@ -105,6 +111,8 @@ G4VPhysicalVolume* Geometry::Construct(){
       
     G4LogicalVolume* logic_Calorimeter_cell = 
         new G4LogicalVolume(solid_Calorimeter_cell, PbW04, "Calorimeter_cell");
+
+    G4cout << PbW04 << "\n";
 
     G4VPhysicalVolume* phys_Calorimeter_cell = 
         new G4PVPlacement(0, 
