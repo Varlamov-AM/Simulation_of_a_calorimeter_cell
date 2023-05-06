@@ -29,8 +29,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code)
     fParticleGun->SetParticleDefinition(particle);
     fParticleGun->SetParticlePosition(G4ThreeVector(0,0,-10*cm));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
-    random_gen = new TRandom();
-    random_gen->SetSeed(0);
     particle_PDG_code = PDG_code;
     Action_generator_mode = true;
 
@@ -57,18 +55,18 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code, G4double Particle
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction(){
     delete fParticleGun;
-    delete random_gen;
 };
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 
     if (Action_generator_mode){
-        particle_Energy = random_gen->Uniform(50.) * GeV;   
+        particle_Energy = ROOTWriter::GetPointer()->rndm->Uniform(50.) * GeV;
         fParticleGun->SetParticleEnergy(particle_Energy);
     } 
 
 
     ROOTWriter::GetPointer()->Set_init_data(particle_Energy);
+
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
     

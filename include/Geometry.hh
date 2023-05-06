@@ -28,9 +28,9 @@ protected:
 
 private:
 
-	G4double world_x = 40*cm;
-	G4double world_y = 40*cm;
-	G4double world_z = 80*cm;
+	G4double world_x = 50*cm;
+	G4double world_y = 50*cm;
+	G4double world_z = 160*cm;
 
   
 };
