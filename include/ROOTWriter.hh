@@ -6,6 +6,7 @@
 #include "TH2D.h"
 #include "TH3D.h"
 #include "TFile.h"
+#include "TRandom.h"
 #include <string>
 #include <iostream>
 #include "G4SystemOfUnits.hh"
