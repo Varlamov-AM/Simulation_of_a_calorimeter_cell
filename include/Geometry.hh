@@ -3,6 +3,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
+#include "TString.h"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
@@ -10,7 +11,7 @@ class G4LogicalVolume;
 class G4Material;
 
 class Geometry : public G4VUserDetectorConstruction{
-	public:
+public:
 
 	Geometry();
 
@@ -21,6 +22,10 @@ class Geometry : public G4VUserDetectorConstruction{
   	G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
   
   	G4Material* DefineMaterial(G4String material);
+
+	const static G4int ncell_x = 5;
+    const static G4int ncell_y = 5;
+	TString cell_sens_name[ncell_x][ncell_y];
   
 protected:
 

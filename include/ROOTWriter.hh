@@ -10,50 +10,40 @@
 #include <string>
 #include <iostream>
 #include "G4SystemOfUnits.hh"
+#include "Geometry.hh"
 
 using namespace std;
 
 class ROOTWriter{
   
 public:
-  
-  static ROOTWriter* GetPointer(){
+
+    static ROOTWriter* GetPointer(){
     if(pInstance==0) pInstance = new ROOTWriter();
     return pInstance;
-  };
+    };
 
-  void Incr_energy_edept(G4double);
+    void Incr_energy_edept(G4int, G4int, G4double);
 
-  void Set_init_data(G4double);
+    void Set_init_data(G4double);
 
-  void Refresh_data();
-  
-  void Initialize(); 
-  
-  void Fill();    
-  
-  void Finalize();
+    void Refresh_data();
 
-  TRandom* rndm;
+    void Initialize(); 
+
+    void Fill();    
+
+    void Finalize();
 
 private:
 
 
-  TFile* output_hist_file = 0;
-  TFile* output_tree_file = 0;
+    TFile* output_file = 0;
+    TTree* calorimeter_data = 0;
+    std::vector<G4double> cell_energy_edeption;
+    G4double initial_energy = 0;
 
-  TTree* energy_tree = 0;
-
-  TH2D*  prime_edeption_hist = 0;
-  TH2D*  smear_edeption_hist = 0;
-  TH2D*  prime_optic_photons = 0;
-  TH2D*  smear_optic_photons = 0;
-  
-  G4double optic_photons_energy_rate = 0.9; // MeV^{-1}
-  G4double real_particle_energy = 0;
-  G4double edepted_particle_energy = 0;
-
-  static ROOTWriter* pInstance;
+    static ROOTWriter* pInstance;
 
 };
 

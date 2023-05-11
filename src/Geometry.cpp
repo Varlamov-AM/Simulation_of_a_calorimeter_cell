@@ -10,13 +10,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "Detector.hh"
+#include "TString.h"
 
 using namespace CLHEP;
 
 Geometry::Geometry() 
-  : G4VUserDetectorConstruction(), fScoringVolume(0){};
+  : G4VUserDetectorConstruction(), fScoringVolume(0){}
 
-Geometry::~Geometry(){};
+Geometry::~Geometry(){}
 
 G4VPhysicalVolume* Geometry::Construct(){ 
 
@@ -30,8 +31,8 @@ G4VPhysicalVolume* Geometry::Construct(){
     G4Material* aluminium = DefineMaterial("Aluminium");
     G4Material* PbW04 = DefineMaterial("PbWO4");
 
-    G4double cell_x = 66*mm/2;
-    G4double cell_y = 66*mm/2;
+    G4double cell_x = 22*mm/2;
+    G4double cell_y = 22*mm/2;
     G4double cell_z  = 18*cm/2;
 
     G4double magnet_x = 40*cm/2;
@@ -104,32 +105,77 @@ G4VPhysicalVolume* Geometry::Construct(){
                               plates_parametrisation, 
                               checkOverlaps);
 
-    // Create calorimeter cell
+    // Create calorimeter (cells array);
 
-    G4Box* solid_Calorimeter_cell = 
-        new G4Box("Calorimeter_cell", cell_x, cell_y, cell_z);
+    // First attempt to create cell structure of calorimeter.
+    // Create ncell_x x ncell_y calorimeter with 22 mm cells.
+    
+
+   G4Box* solid_calorimeter_cells[ncell_x][ncell_y];
+   TString solid_cell_name[ncell_x][ncell_y];
+
+    for (G4int cx = 0; cx < ncell_x; ++cx){
+        for (G4int cy = 0; cy < ncell_y; ++cy){
+            solid_cell_name[cx][cy] = 
+                Form("Calorimeter_cell_solid_column_%d_row_%d", cx, cy);
+            solid_calorimeter_cells[cx][cy] = 
+                new G4Box(G4String(solid_cell_name[cx][cy].Data()), 
+                          cell_x, 
+                          cell_y, 
+                          cell_z);
+        }
+    }
       
-    G4LogicalVolume* logic_Calorimeter_cell = 
-        new G4LogicalVolume(solid_Calorimeter_cell, PbW04, "Calorimeter_cell");
+    G4LogicalVolume* logical_calorimeter_cells[ncell_x][ncell_y];
+    TString logic_cell_name[ncell_x][ncell_y];
+
+    for (G4int cx = 0; cx < ncell_x; ++cx){
+        for (G4int cy = 0; cy < ncell_y; ++cy){
+            logic_cell_name[cx][cy] = 
+                Form("Calorimeter_cell_logic_column_%d_row_%d", cx, cy);
+            logical_calorimeter_cells[cx][cy] = 
+                new G4LogicalVolume(solid_calorimeter_cells[cx][cy], 
+                                    PbW04, 
+                                    G4String(logic_cell_name[cx][cy].Data()));
+        }
+    }
 
     G4cout << PbW04 << "\n";
 
-    G4VPhysicalVolume* phys_Calorimeter_cell = 
-        new G4PVPlacement(0, 
-                          G4ThreeVector(0, 0, 2 * magnet_z + cell_z + 10*cm),
-                          logic_Calorimeter_cell,
-                          "Calorimeter_cell",
-                          logic_World, 
-                          false, 
-                          0,
-                          checkOverlaps);
+    G4VPhysicalVolume* phys_calorimeter_cells[ncell_x][ncell_y];
+    TString phys_cell_name[ncell_x][ncell_y];
 
+    for (G4int cx = 0; cx < ncell_x; ++cx){
+        for (G4int cy = 0; cy < ncell_y; ++cy){
+            phys_cell_name[cx][cy] = 
+                Form("Calorimeter_cell_phys_column_%d_row_%d", cx, cy);
+            phys_calorimeter_cells[cx][cy] = 
+                new G4PVPlacement(0, 
+                                  G4ThreeVector((cx - 2) * cell_x * 2, 
+                                                (cy - 2) * cell_y * 2,
+                                                2*magnet_z + cell_z + 10*cm), 
+                                  logical_calorimeter_cells[cx][cy],
+                                  G4String(phys_cell_name[cx][cy].Data()), 
+                                  logic_World, 
+                                  false, 
+                                  0, 
+                                  checkOverlaps);
+        }
+    }
 
-
-    Detector* Cal_cell = new Detector("Cal_cell");
+    Detector* calorimeter_cells[ncell_x][ncell_y];
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    SDman->AddNewDetector(Cal_cell);
-    logic_Calorimeter_cell->SetSensitiveDetector(Cal_cell);
+
+    for (G4int cx = 0; cx < ncell_x; ++cx){
+        for (G4int cy = 0; cy < ncell_y; ++cy){
+            cell_sens_name[cx][cy] = Form("Cell_%d_%d", cx, cy);
+            calorimeter_cells[cx][cy] = 
+                new Detector(G4String(cell_sens_name[cx][cy].Data()));
+            SDman->AddNewDetector(calorimeter_cells[cx][cy]);
+            logical_calorimeter_cells[cx][cy]->
+                SetSensitiveDetector(calorimeter_cells[cx][cy]);
+        }
+    }
 
     return phys_World;
 
