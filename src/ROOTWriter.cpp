@@ -23,6 +23,8 @@ void ROOTWriter::Initialize(){
     calorimeter_data = new TTree("calorimeter_data", "calorimeter_data");
     calorimeter_data->Branch("initial_particle_energy", &initial_energy);
     calorimeter_data->Branch("cell_energy", &cell_energy_edeption);
+    calorimeter_data->Branch("initial_x", &initial_x);
+    calorimeter_data->Branch("initial_y", &initial_y);
 
     return;
 }
@@ -34,7 +36,15 @@ void ROOTWriter::Refresh_data()
         cell_energy_edeption[i] = 0.;
     }   
 
+    initial_x = 0;
+    initial_y = 0;
+
     return;
+}
+
+void ROOTWriter::Set_beam_positin(G4double bx, G4double by){
+    initial_x = bx;
+    initial_y = by;
 }
 
 void ROOTWriter::Incr_energy_edept(G4int cellx, G4int celly, G4double en_ed){
@@ -50,6 +60,7 @@ void ROOTWriter::Set_init_data(G4double energy){
 
     return;
 }
+
 
 void ROOTWriter::Fill(){
 

@@ -27,6 +27,8 @@ public:
 
     void Set_init_data(G4double);
 
+    void Set_beam_positin(G4double, G4double);
+
     void Refresh_data();
 
     void Initialize(); 
@@ -42,6 +44,8 @@ private:
     TTree* calorimeter_data = 0;
     std::vector<G4double> cell_energy_edeption;
     G4double initial_energy = 0;
+    G4double initial_x = 0;
+    G4double initial_y = 0;
 
     static ROOTWriter* pInstance;
 

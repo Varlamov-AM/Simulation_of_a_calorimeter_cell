@@ -23,9 +23,8 @@ public:
   
   	G4Material* DefineMaterial(G4String material);
 
-	const static G4int ncell_x = 5;
-    const static G4int ncell_y = 5;
-	TString cell_sens_name[ncell_x][ncell_y];
+	const static G4int ncell_x = 21;
+    const static G4int ncell_y = 21;
   
 protected:
 
@@ -35,7 +34,7 @@ private:
 
 	G4double world_x = 50*cm;
 	G4double world_y = 50*cm;
-	G4double world_z = 160*cm;
+	G4double world_z = 360*cm;
 
   
 };

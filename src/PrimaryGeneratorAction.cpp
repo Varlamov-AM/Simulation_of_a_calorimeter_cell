@@ -12,6 +12,7 @@
 #include "G4MuonMinus.hh"
 #include "TMath.h"
 #include "G4GeneralParticleSource.hh"
+#include "TRandom.h"
 
 
 
@@ -26,6 +27,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code)
 
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* particle = particleTable->FindParticle(PDG_code);
+    
     fParticleGun->SetParticleDefinition(particle);
     fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -10*cm));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
@@ -43,10 +45,12 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code, G4double Particle
     particle_PDG_code = PDG_code;
     particle_Energy = Particle_energy;
 
+    rndm = new TRandom();
+
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* particle = particleTable->FindParticle(PDG_code);
     fParticleGun->SetParticleDefinition(particle);
-    fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -10*cm));
+    // fParticleGun->SetParticlePosition(G4ThreeVector(rndm->Uniform(-1, 1) * 11 * mm, rndm->Uniform(-1, 1) * 11 * mm, -240*mm));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
     fParticleGun->SetParticleEnergy(particle_Energy);
     Action_generator_mode = false;
@@ -55,6 +59,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code, G4double Particle
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction(){
     delete fParticleGun;
+    delete rndm;
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
@@ -64,7 +69,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
         fParticleGun->SetParticleEnergy(particle_Energy);
     } 
 
+    G4double beam_x = rndm->Uniform(-1, 1) * 11 * mm;
+    G4double beam_y = rndm->Uniform(-1, 1) * 11 * mm;
+
+    fParticleGun->SetParticlePosition(G4ThreeVector(rndm->Uniform(-1, 1) * 11 * mm, rndm->Uniform(-1, 1) * 11 * mm, -240*mm)); 
+
     ROOTWriter::GetPointer()->Set_init_data(particle_Energy);
+    ROOTWriter::GetPointer()->Set_beam_positin(beam_x, beam_y);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
     

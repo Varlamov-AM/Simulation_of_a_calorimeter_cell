@@ -20,14 +20,23 @@ void Detector::Initialize(G4HCofThisEvent* hce){}
 
 G4bool Detector::ProcessHits(G4Step* step, G4TouchableHistory*){
 
-    for (G4int cx = 0; cx < Geometry::ncell_x; ++cx){
-        for (G4int cy = 0; cy < Geometry::ncell_y; ++cy){
-            if (SensitiveDetectorName == Form("Cell_%d_%d", cx, cy)){
-                ROOTWriter::GetPointer()->
-                    Incr_energy_edept(cx, cy, step->GetTotalEnergyDeposit());
-            }
-        }   
-    }
+
+    if (SensitiveDetectorName == "calorimeter"){
+        G4String cal_cell_phys_vol_name = 
+            step->GetTrack()->GetTouchable()->GetVolume()->GetName();
+        G4String cy_str= 
+            cal_cell_phys_vol_name.substr(10, cal_cell_phys_vol_name.
+                                                find("_", 10) - 10);
+        G4String cx_str= 
+            cal_cell_phys_vol_name.substr(
+                cal_cell_phys_vol_name.find_last_of("_") + 1, 
+                cal_cell_phys_vol_name.size());
+        int cx = std::atoi(cx_str);
+        int cy = std::atoi(cy_str) - 1;
+        
+        ROOTWriter::GetPointer()->
+            Incr_energy_edept(cx, cy, step->GetTotalEnergyDeposit());
+    }        
 
     return true;
 }

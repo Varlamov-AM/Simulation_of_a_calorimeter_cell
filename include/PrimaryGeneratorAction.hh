@@ -34,6 +34,7 @@ private:
   G4int     particle_PDG_code;
   G4double  particle_Energy;
   G4bool    Action_generator_mode;
+  TRandom*  rndm;
   
 };
 
