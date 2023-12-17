@@ -30,13 +30,13 @@ include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 #include(FindROOT.cmake) 
 set(INCLUDE_DIRECTORIES                                                                      
-	        ${ROOT_INCLUDE_DIRS}                                                                    
+	        ${ROOT_INCLUDE_DIRS} ${AliEvent_INCLUDE_DIRS}                                                                  
 )                                                                                            
 		                                                                                             
 include_directories( ${INCLUDE_DIRECTORIES})                                                 
 		                                                                                             
 set(LINK_DIRECTORIES                                                                         
-	        ${ROOT_LIBRARY_DIR}                                                                    ) 
+	        ${ROOT_LIBRARY_DIR}) 
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -49,10 +49,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(Simulation_of_a_calorimeter_cell.exe Simulation_of_a_calorimeter_cell.cpp ${sources} ${headers})
-target_link_libraries(Simulation_of_a_calorimeter_cell.exe ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} 
-#"/cvmfs/sft.cern.ch/lcg/external/ROOT/5.34.23/x86_64-slc6-gcc49-opt/root/lib/libRIO.so" 
-#"/cvmfs/sft.cern.ch/lcg/external/ROOT/5.34.23/x86_64-slc6-gcc49-opt/root/lib/libHist.so"
-)
+target_link_libraries(Simulation_of_a_calorimeter_cell.exe ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

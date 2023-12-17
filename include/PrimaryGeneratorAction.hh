@@ -14,6 +14,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
 public:
 
+  PrimaryGeneratorAction();    
+
   PrimaryGeneratorAction(G4int);    
 
   PrimaryGeneratorAction(G4int, G4double);   
@@ -31,6 +33,7 @@ private:
   
   static PrimaryGeneratorAction* fPtr;
   G4ParticleGun* fParticleGun;
+  G4int     ievent;
   G4int     particle_PDG_code;
   G4double  particle_Energy;
   G4bool    Action_generator_mode;

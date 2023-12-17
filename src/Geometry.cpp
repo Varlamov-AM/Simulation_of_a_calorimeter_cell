@@ -84,135 +84,134 @@ G4VPhysicalVolume* Geometry::Construct(){
                           0,                     
                           checkOverlaps);
 
-    // Create cooper, aluminium, liquid helium and carbon layer
+    // // Create cooper, aluminium, liquid helium and carbon layer
 
-    G4Box* solid_cu_layer_1 = 
-        new G4Box("al_layer_1", world_x, world_y, cu_layer_1_wid);
+    // G4Box* solid_cu_layer_1 = 
+    //     new G4Box("al_layer_1", world_x, world_y, cu_layer_1_wid);
 
-    G4LogicalVolume* logic_cu_layer_1 = 
-        new G4LogicalVolume(solid_cu_layer_1, cooper, "logic_cu_layer_1");
+    // G4LogicalVolume* logic_cu_layer_1 = 
+    //     new G4LogicalVolume(solid_cu_layer_1, cooper, "logic_cu_layer_1");
 
-    G4VPhysicalVolume* phys_cu_layer_1 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, cu_layer_1_pos + cu_layer_1_wid), "phys_cu_layer_1",  logic_cu_layer_1, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_cu_layer_1 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, cu_layer_1_pos + cu_layer_1_wid), "phys_cu_layer_1",  logic_cu_layer_1, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_he_layer_1 = 
-        new G4Box("he_layer_1", world_x, world_y, he_layer_1_wid);
+    // G4Box* solid_he_layer_1 = 
+    //     new G4Box("he_layer_1", world_x, world_y, he_layer_1_wid);
 
-    G4LogicalVolume* logic_he_layer_1 = 
-        new G4LogicalVolume(solid_he_layer_1, liquidHe, "logic_he_layer_1");
+    // G4LogicalVolume* logic_he_layer_1 = 
+    //     new G4LogicalVolume(solid_he_layer_1, liquidHe, "logic_he_layer_1");
 
-    G4VPhysicalVolume* phys_he_layer_1 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0,he_layer_1_pos + he_layer_1_wid), "phys_he_layer_1",  logic_he_layer_1, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_he_layer_1 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0,he_layer_1_pos + he_layer_1_wid), "phys_he_layer_1",  logic_he_layer_1, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_al_layer_1 = 
-        new G4Box("al_layer_1", world_x, world_y, al_layer_1_wid);
+    // G4Box* solid_al_layer_1 = 
+    //     new G4Box("al_layer_1", world_x, world_y, al_layer_1_wid);
 
-    G4LogicalVolume* logic_al_layer_1 = 
-        new G4LogicalVolume(solid_al_layer_1, aluminium, "logic_al_layer_1");
+    // G4LogicalVolume* logic_al_layer_1 = 
+    //     new G4LogicalVolume(solid_al_layer_1, aluminium, "logic_al_layer_1");
 
-    G4VPhysicalVolume* phys_al_layer_1 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_1_pos + al_layer_1_wid), "phys_al_layer_1",  logic_al_layer_1, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_1 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_1_pos + al_layer_1_wid), "phys_al_layer_1",  logic_al_layer_1, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_al_layer_2 = 
-        new G4Box("al_layer_2", world_x, world_y, al_layer_2_wid);
+    // G4Box* solid_al_layer_2 = 
+    //     new G4Box("al_layer_2", world_x, world_y, al_layer_2_wid);
 
-    G4LogicalVolume* logic_al_layer_2 = 
-        new G4LogicalVolume(solid_al_layer_2, aluminium, "logic_al_layer_2");
+    // G4LogicalVolume* logic_al_layer_2 = 
+    //     new G4LogicalVolume(solid_al_layer_2, aluminium, "logic_al_layer_2");
 
-    G4VPhysicalVolume* phys_al_layer_2 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_2_pos + al_layer_2_wid ), "phys_al_layer_2",  logic_al_layer_2, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_2 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_2_pos + al_layer_2_wid ), "phys_al_layer_2",  logic_al_layer_2, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_c_layer_1 = 
-        new G4Box("c_layer_1", world_x, world_y, c_layer_1_wid);
+    // G4Box* solid_c_layer_1 = 
+    //     new G4Box("c_layer_1", world_x, world_y, c_layer_1_wid);
 
-    G4LogicalVolume* logic_c_layer_1 = 
-        new G4LogicalVolume(solid_c_layer_1, carbon, "logic_c_layer_1");
+    // G4LogicalVolume* logic_c_layer_1 = 
+    //     new G4LogicalVolume(solid_c_layer_1, carbon, "logic_c_layer_1");
 
-    G4VPhysicalVolume* phys_c_layer_1 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, c_layer_1_pos + c_layer_1_wid ), "phys_c_layer_1",  logic_c_layer_1, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_c_layer_1 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, c_layer_1_pos + c_layer_1_wid ), "phys_c_layer_1",  logic_c_layer_1, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_al_layer_3 = 
-        new G4Box("al_layer_3", world_x, world_y, al_layer_3_wid);
+    // G4Box* solid_al_layer_3 = 
+    //     new G4Box("al_layer_3", world_x, world_y, al_layer_3_wid);
 
-    G4LogicalVolume* logic_al_layer_3 = 
-        new G4LogicalVolume(solid_al_layer_3, aluminium, "logic_al_layer_3");
+    // G4LogicalVolume* logic_al_layer_3 = 
+    //     new G4LogicalVolume(solid_al_layer_3, aluminium, "logic_al_layer_3");
 
-    G4VPhysicalVolume* phys_al_layer_3 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_3_pos + al_layer_3_wid + 0.01), "phys_al_layer_3",  logic_al_layer_3, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_3 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_3_pos + al_layer_3_wid + 0.01), "phys_al_layer_3",  logic_al_layer_3, phys_World, false, 0, checkOverlaps);
     
-    G4Box* solid_al_layer_4 = 
-        new G4Box("al_layer_4", world_x, world_y, al_layer_4_wid    );
+    // G4Box* solid_al_layer_4 = 
+    //     new G4Box("al_layer_4", world_x, world_y, al_layer_4_wid    );
 
-    G4LogicalVolume* logic_al_layer_4 = 
-        new G4LogicalVolume(solid_al_layer_4, aluminium, "logic_al_layer_4");
+    // G4LogicalVolume* logic_al_layer_4 = 
+    //     new G4LogicalVolume(solid_al_layer_4, aluminium, "logic_al_layer_4");
 
-    G4VPhysicalVolume* phys_al_layer_4 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_4_pos + al_layer_4_wid + 0.01), "phys_al_layer_4",  logic_al_layer_4, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_4 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, al_layer_4_pos + al_layer_4_wid + 0.01), "phys_al_layer_4",  logic_al_layer_4, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_cu_layer_2 = 
-        new G4Box("al_layer_2", world_x, world_y, cu_layer_1_wid);
+    // G4Box* solid_cu_layer_2 = 
+    //     new G4Box("al_layer_2", world_x, world_y, cu_layer_1_wid);
 
-    G4LogicalVolume* logic_cu_layer_2 = 
-        new G4LogicalVolume(solid_cu_layer_2, cooper, "logic_cu_layer_2");
+    // G4LogicalVolume* logic_cu_layer_2 = 
+    //     new G4LogicalVolume(solid_cu_layer_2, cooper, "logic_cu_layer_2");
 
-    G4VPhysicalVolume* phys_cu_layer_2 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, -cu_layer_1_pos - cu_layer_1_wid), "phys_cu_layer_2",  logic_cu_layer_2, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_cu_layer_2 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, -cu_layer_1_pos - cu_layer_1_wid), "phys_cu_layer_2",  logic_cu_layer_2, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_he_layer_2 = 
-        new G4Box("he_layer_2", world_x, world_y, he_layer_1_wid);
+    // G4Box* solid_he_layer_2 = 
+    //     new G4Box("he_layer_2", world_x, world_y, he_layer_1_wid);
 
-    G4LogicalVolume* logic_he_layer_2 = 
-        new G4LogicalVolume(solid_he_layer_2, liquidHe, "logic_he_layer_2");
+    // G4LogicalVolume* logic_he_layer_2 = 
+    //     new G4LogicalVolume(solid_he_layer_2, liquidHe, "logic_he_layer_2");
 
-    G4VPhysicalVolume* phys_he_layer_2 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, -he_layer_1_pos - he_layer_1_wid), "phys_he_layer_2",  logic_he_layer_2, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_he_layer_2 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, -he_layer_1_pos - he_layer_1_wid), "phys_he_layer_2",  logic_he_layer_2, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_al_layer_5 = 
-        new G4Box("al_layer_5", world_x, world_y, al_layer_1_wid);
+    // G4Box* solid_al_layer_5 = 
+    //     new G4Box("al_layer_5", world_x, world_y, al_layer_1_wid);
 
-    G4LogicalVolume* logic_al_layer_5 = 
-        new G4LogicalVolume(solid_al_layer_5, aluminium, "logic_al_layer_5");
+    // G4LogicalVolume* logic_al_layer_5 = 
+    //     new G4LogicalVolume(solid_al_layer_5, aluminium, "logic_al_layer_5");
 
-    G4VPhysicalVolume* phys_al_layer_5 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_1_pos - al_layer_1_wid), "phys_al_layer_5",  logic_al_layer_5, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_5 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_1_pos - al_layer_1_wid), "phys_al_layer_5",  logic_al_layer_5, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_al_layer_6 = 
-        new G4Box("al_layer_6", world_x, world_y, al_layer_2_wid);
+    // G4Box* solid_al_layer_6 = 
+    //     new G4Box("al_layer_6", world_x, world_y, al_layer_2_wid);
 
-    G4LogicalVolume* logic_al_layer_6 = 
-        new G4LogicalVolume(solid_al_layer_6, aluminium, "logic_al_layer_6");
+    // G4LogicalVolume* logic_al_layer_6 = 
+    //     new G4LogicalVolume(solid_al_layer_6, aluminium, "logic_al_layer_6");
 
-    G4VPhysicalVolume* phys_al_layer_6 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_2_pos - al_layer_2_wid ), "phys_al_layer_6",  logic_al_layer_6, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_6 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_2_pos - al_layer_2_wid ), "phys_al_layer_6",  logic_al_layer_6, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_c_layer_2 = 
-        new G4Box("c_layer_2", world_x, world_y, c_layer_1_wid);
+    // G4Box* solid_c_layer_2 = 
+    //     new G4Box("c_layer_2", world_x, world_y, c_layer_1_wid);
 
-    G4LogicalVolume* logic_c_layer_2 = 
-        new G4LogicalVolume(solid_c_layer_2, carbon, "logic_c_layer_2");
+    // G4LogicalVolume* logic_c_layer_2 = 
+    //     new G4LogicalVolume(solid_c_layer_2, carbon, "logic_c_layer_2");
 
-    G4VPhysicalVolume* phys_c_layer_2 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, -c_layer_1_pos - c_layer_1_wid ), "phys_c_layer_2",  logic_c_layer_2, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_c_layer_2 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, -c_layer_1_pos - c_layer_1_wid ), "phys_c_layer_2",  logic_c_layer_2, phys_World, false, 0, checkOverlaps);
 
-    G4Box* solid_al_layer_7 = 
-        new G4Box("al_layer_7", world_x, world_y, al_layer_3_wid);
+    // G4Box* solid_al_layer_7 = 
+    //     new G4Box("al_layer_7", world_x, world_y, al_layer_3_wid);
 
-    G4LogicalVolume* logic_al_layer_7 = 
-        new G4LogicalVolume(solid_al_layer_7, aluminium, "logic_al_layer_7");
+    // G4LogicalVolume* logic_al_layer_7 = 
+    //     new G4LogicalVolume(solid_al_layer_7, aluminium, "logic_al_layer_7");
 
-    G4VPhysicalVolume* phys_al_layer_7 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_3_pos - al_layer_3_wid - 0.01), "phys_al_layer_7",  logic_al_layer_7, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_7 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_3_pos - al_layer_3_wid - 0.01), "phys_al_layer_7",  logic_al_layer_7, phys_World, false, 0, checkOverlaps);
     
-    G4Box* solid_al_layer_8 = 
-        new G4Box("al_layer_8", world_x, world_y, al_layer_4_wid);
+    // G4Box* solid_al_layer_8 = 
+    //     new G4Box("al_layer_8", world_x, world_y, al_layer_4_wid);
 
-    G4LogicalVolume* logic_al_layer_8 = 
-        new G4LogicalVolume(solid_al_layer_8, aluminium, "logic_al_layer_8");
+    // G4LogicalVolume* logic_al_layer_8 = 
+    //     new G4LogicalVolume(solid_al_layer_8, aluminium, "logic_al_layer_8");
 
-    G4VPhysicalVolume* phys_al_layer_8 = 
-        new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_4_pos - al_layer_4_wid - 0.01), "phys_al_layer_8",  logic_al_layer_8, phys_World, false, 0, checkOverlaps);
+    // G4VPhysicalVolume* phys_al_layer_8 = 
+    //     new G4PVPlacement(0, G4ThreeVector(0, 0, -al_layer_4_pos - al_layer_4_wid - 0.01), "phys_al_layer_8",  logic_al_layer_8, phys_World, false, 0, checkOverlaps);
     
-
     
     // Create calorimeter (cells array);
     // Create ncell_x x ncell_y calorimeter with 22 mm cells.

@@ -39,6 +39,14 @@ int main(int argc, char** argv){
     G4int     particle_PDG;
     G4double  particle_Energy;
 
+    // Initialize ROOT
+    ROOTWriter::GetPointer()->Initialize();
+
+    runManager->Initialize();
+
+    G4int n_entries = ROOTWriter::GetPointer()->Get_tree_entries();
+    G4cout << n_entries << "\n";
+
    if (argc == 3){
        particle_PDG    = atoi(argv[2]);
        G4cout << "Particle_PDG = " << particle_PDG << G4endl;
@@ -50,27 +58,22 @@ int main(int argc, char** argv){
        G4cout <<
            "Particle Energy = " << particle_Energy << " MeV\n" << G4endl;
        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
-                                                           particle_Energy));
-   } else {
+                                                            particle_Energy));
+   } else if (argc == 2){
        particle_PDG = 11;
        particle_Energy = 500 * MeV;
        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
-                                                           particle_Energy));
+                                                            particle_Energy));
+   } else {
+        runManager->SetUserAction(new PrimaryGeneratorAction());
    }
 
     // User action initialization
     runManager->SetUserAction(new EventAction());
     runManager->SetUserAction(new SteppingAction());
-    runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
-                                                         particle_Energy));
-
-    // Initialize ROOT
-    ROOTWriter::GetPointer()->Initialize();
-
 
     // Initialize G4 kernel
     //
-    runManager->Initialize();
 
     #ifdef G4VIS_USE
         // Initialize visualization
@@ -81,24 +84,28 @@ int main(int argc, char** argv){
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-    if (argc!=1) {
+    if (argc != 1) {
         // batch mode
         G4String command = "/control/execute ";
         G4String fileName = argv[1];
         UImanager->ApplyCommand(command+fileName);
-    }
-    else {
-        // interactive mode : define UI session
-    #ifdef G4UI_USE
-        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-    #ifdef G4VIS_USE
-        UImanager->ApplyCommand("/control/execute init_vis.mac"); 
-    #else
-        UImanager->ApplyCommand("/control/execute init.mac"); 
-    #endif
-        ui->SessionStart();
-        delete ui;
-    #endif
+    } else {
+        G4String command = "/run/beamOn ";
+        UImanager->ApplyCommand("/random/setSeeds 12365 1");
+        // UImanager->ApplyCommand("/event/verbose 3");
+        UImanager->ApplyCommand(command+G4String(Form("%d", n_entries)));
+        // UImanager->ApplyCommand(command+G4String(Form("%d", 10000)));
+    //     // interactive mode : define UI session
+    // #ifdef G4UI_USE
+    //     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    // #ifdef G4VIS_USE
+    //     UImanager->ApplyCommand("/control/execute init_vis.mac"); 
+    // #else
+    //     UImanager->ApplyCommand("/control/execute init.mac"); 
+    // #endif
+    //     ui->SessionStart();
+    //     delete ui;
+    // #endif
     }
   
     ROOTWriter::GetPointer()->Finalize();
@@ -108,7 +115,7 @@ int main(int argc, char** argv){
     #ifdef G4VIS_USE
         delete visManager;
     #endif
-        delete runManager;
+        delete runManager;  
 
     return 0;
 }
