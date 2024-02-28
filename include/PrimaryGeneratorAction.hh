@@ -1,7 +1,8 @@
+#include "G4VUserPrimaryGeneratorAction.hh"
+
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 #include "G4GeneralParticleSource.hh"
@@ -9,6 +10,7 @@
 #include "TRandom.h"
 
 class G4Event;
+class PrimaryGenerator;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
@@ -30,9 +32,12 @@ public:
     
    
 private:
+
+  PrimaryGenerator* fPrimaryGenerator;
   
   static PrimaryGeneratorAction* fPtr;
   G4ParticleGun* fParticleGun;
+  G4ParticleGun** fParticleGuns;
   G4int     ievent;
   G4int     particle_PDG_code;
   G4double  particle_Energy;

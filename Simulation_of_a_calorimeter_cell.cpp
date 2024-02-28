@@ -93,7 +93,8 @@ int main(int argc, char** argv){
         G4String command = "/run/beamOn ";
         UImanager->ApplyCommand("/random/setSeeds 12365 1");
         // UImanager->ApplyCommand("/event/verbose 3");
-        UImanager->ApplyCommand(command+G4String(Form("%d", n_entries)));
+        // UImanager->ApplyCommand(command+G4String(Form("%d", n_entries)));
+        UImanager->ApplyCommand(command+G4String(Form("%d", 20)));
         // UImanager->ApplyCommand(command+G4String(Form("%d", 10000)));
     //     // interactive mode : define UI session
     // #ifdef G4UI_USE
