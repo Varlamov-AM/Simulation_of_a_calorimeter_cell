@@ -23,8 +23,8 @@ public:
   
   	G4Material* DefineMaterial(G4String material);
 
-	const static G4int ncell_x = 21;
-    const static G4int ncell_y = 21;
+	const static G4int ncell_x = 41;
+    const static G4int ncell_y = 41;
   
 protected:
 

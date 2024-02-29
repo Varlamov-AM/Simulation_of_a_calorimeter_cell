@@ -36,101 +36,85 @@ void ROOTWriter::Initialize(){
     Link_tree_branches();
 
     calorimeter_data = new TTree("calorimeter_data", "calorimeter_data");
+    calorimeter_data->SetMaxTreeSize(10000000000);
+    calorimeter_data->SetAutoSave(0);
     calorimeter_data->Branch("cell_energy", &cell_energy_edeption);
     calorimeter_data->Branch("event_data", &event_data_to_output);
 
     return;
 }
 
-void ROOTWriter::Refresh_data()
-{
-
-    event_data_to_output.clear();
-    cell_energy_edeption.clear();
-    particle_counter = 0;
-
+void ROOTWriter::Link_tree_branches(){
+    input_chain->SetBranchAddress("event", &event_data);
     return;
 }
 
 void ROOTWriter::Incr_energy_edept(G4int cellx, G4int celly, G4double en_ed){
-
     current_particle_edeption[cellx * Geometry::ncell_x + celly] += en_ed;
-
     return;
 }
 
-void ROOTWriter::Link_tree_branches(){
-
-    input_chain->SetBranchAddress("event", &event_data);
-
-    return;
-}
-
-void ROOTWriter::Get_tree_entry(G4int ientry){
-    input_chain->GetEntry(ientry);
-
+void ROOTWriter::Set_event_counter(G4int ev_counter){
+    event_counter = ev_counter;
     return;
 }
 
 void ROOTWriter::Inc_event_counter(){
     ++event_counter;
-}
-
-void ROOTWriter::Resize_result_vectors(){
-    event_data_to_output.resize(ROOTWriter::GetPointer()->Get_event_size());
-    cell_energy_edeption.resize(ROOTWriter::GetPointer()->Get_event_size());
-}
-
-void ROOTWriter::Get_particle_in_event_by_number(G4int p_counter, std::vector<double>& particle_data){
-    if (event_data->size() != 0){
-        particle_data = (*event_data)[p_counter];
-        event_data_to_output[p_counter] = particle_data;
-    }
     return;
 }
 
-void ROOTWriter::Add_current_particle(G4int p_counter){
+void ROOTWriter::Inc_particle_counter(){
+    ++particle_counter;
+    return;
+}
 
-    std::vector<double> tmp = current_particle_edeption;
-    cell_energy_edeption[p_counter] = tmp;
-
-    G4double s = 0;
-    for (auto d : tmp){
-        s += d;
-    }
-
-    std::cout << "i = " << p_counter << " energy deposit = " << s << "\n";
+void ROOTWriter::Get_particle_in_event_by_number(G4int p_counter, std::vector<double>& data){
+    
+    data = (*event_data)[p_counter];
     
     return;
 }
 
-G4int ROOTWriter::Get_tree_entries(){
-    return input_chain->GetEntries();
+void ROOTWriter::Set_particle_in_output_data(std::vector<double> particle){
+    event_data_to_output.push_back(particle);
+    return;
 }
 
-G4int ROOTWriter::Get_event_counter(){
-    return event_counter;
-}
+// void ROOTWriter::Set_current_particle_edeption(){
+//     std::vector<G4double> tmp = current_particle_edeption;
+//     G4double edep = 0;
+//     for (auto d : tmp){
+//         edep += d;
+//     }
+//     G4cout << edep << "\n";
+//     cell_energy_edeption.push_back(tmp);
+//     return;
+// }
 
-G4int ROOTWriter::Get_event_size(){
-    return event_data->size();
-}
-
-G4bool ROOTWriter::Check_acceptance(G4double px, G4double py, G4double pz, G4double p0){
-    G4double eta = 0.5*TMath::Log((TMath::Sqrt(px * px + py * py + pz * pz) + pz)/(TMath::Sqrt(px * px + py * py + pz * pz) - pz));
-    if (fabs(eta) <= 0.5){
-        return true;
-    } else {
-        return false;
-    }
+void ROOTWriter::Get_tree_entry(G4int ientry){
+    input_chain->GetEntry(ientry);
+    Inc_event_counter();
+    return;
 }
 
 void ROOTWriter::Fill(){
 
-
-
-    calorimeter_data->Fill();
-    Refresh_data();
+    if (particle_counter < Get_event_size() - 1){
+        Inc_particle_counter();
+        cell_energy_edeption.push_back(current_particle_edeption);
+        current_particle_edeption.clear();
+        current_particle_edeption.resize(Geometry::ncell_x * Geometry::ncell_y);
+    } else { 
+        particle_counter = 0;
+        Get_tree_entry(event_counter);
+        cell_energy_edeption.push_back(current_particle_edeption);
+        current_particle_edeption.clear();
+        current_particle_edeption.resize(Geometry::ncell_x * Geometry::ncell_y);
+        calorimeter_data->Fill();
+        event_data_to_output.clear();
+        cell_energy_edeption.clear();
+    }
 
     return;
 }
@@ -144,4 +128,29 @@ void ROOTWriter::Finalize(){
     // delete input_file;
 
     return;
+}
+
+G4int ROOTWriter::Get_tree_entries(){
+    return input_chain->GetEntries();
+}
+
+G4int ROOTWriter::Get_event_counter(){
+    return event_counter;
+}
+
+G4int ROOTWriter::Get_particle_counter(){   
+    return particle_counter;
+}
+
+G4int ROOTWriter::Get_event_size(){
+    return event_data->size();
+}
+
+G4bool ROOTWriter::Check_acceptance(G4double px, G4double py, G4double pz, G4double p0){
+    G4double eta = 0.5*TMath::Log((TMath::Sqrt(px * px + py * py + pz * pz) + pz)/(TMath::Sqrt(px * px + py * py + pz * pz) - pz));
+    if (fabs(eta) <= 0.5){
+        return true;
+    } else {
+        return false;
+    }
 }

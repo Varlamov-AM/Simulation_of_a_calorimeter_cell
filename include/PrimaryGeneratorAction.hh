@@ -37,7 +37,7 @@ private:
   
   static PrimaryGeneratorAction* fPtr;
   G4ParticleGun* fParticleGun;
-  G4ParticleGun** fParticleGuns;
+  G4ParticleTable* fParticleTable;
   G4int     ievent;
   G4int     particle_PDG_code;
   G4double  particle_Energy;

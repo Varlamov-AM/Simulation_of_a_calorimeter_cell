@@ -24,7 +24,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     : G4VUserPrimaryGeneratorAction() {
   
     fPtr = this;
-    fPrimaryGenerator = new PrimaryGenerator();
+    fParticleGun = new G4ParticleGun(1);
+    ROOTWriter::GetPointer()->Get_tree_entry(0);
+    fParticleTable = G4ParticleTable::GetParticleTable();
 
 }
 
@@ -34,8 +36,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code)
     fPtr = this;
     fParticleGun  = new G4ParticleGun(1);
 
-    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* particle = particleTable->FindParticle(PDG_code);
+    G4ParticleDefinition* particle = fParticleTable->FindParticle(PDG_code);
     
     fParticleGun->SetParticleDefinition(particle);
     fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -10*cm));
@@ -56,8 +57,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int PDG_code, G4double Particle
 
     rndm = new TRandom();
 
-    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* particle = particleTable->FindParticle(PDG_code);
+    G4ParticleDefinition* particle = fParticleTable->FindParticle(PDG_code);
     fParticleGun->SetParticleDefinition(particle);
     // fParticleGun->SetParticlePosition(G4ThreeVector(rndm->Uniform(-1, 1) * 11 * mm, rndm->Uniform(-1, 1) * 11 * mm, -240*mm));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
@@ -72,7 +72,23 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction(){
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 
-    fPrimaryGenerator->GeneratePrimaryVertex(anEvent);
+    std::vector<G4double> particle_data{5};
+    ROOTWriter::GetPointer()->Get_particle_in_event_by_number(ROOTWriter::GetPointer()->Get_particle_counter(), particle_data);
+    // G4cout << ROOTWriter::GetPointer()->Get_event_counter() << " " << ROOTWriter::GetPointer()->Get_particle_counter() << " " << ROOTWriter::GetPointer()->Get_event_size() << " ";
+
+    G4ParticleDefinition* particle = fParticleTable->FindParticle(particle_data[4]);
+
+    fParticleGun->SetParticleDefinition(particle);
+    fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -250 * mm));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
+    fParticleGun->SetParticleEnergy((particle_data[0] - TMath::Sqrt(particle_data[0] * particle_data[0] - particle_data[1] * particle_data[1] - particle_data[2] * particle_data[2] - particle_data[3] * particle_data[3])) * GeV);
+
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+
+    ROOTWriter::GetPointer()->Set_particle_in_output_data(particle_data);
+    // ROOTWriter::GetPointer()->Set_current_particle_edeption();
+    // G4cout << particle_data[0] << " " << particle_data[1] << " " << particle_data[2] << " " << particle_data[3] << " " << particle_data[4] << "\n";
+    
 
     return;
 }

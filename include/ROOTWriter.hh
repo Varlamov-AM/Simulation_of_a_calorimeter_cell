@@ -25,31 +25,37 @@ public:
     return pInstance;
     };
 
+    void Initialize(); 
+
     void Incr_energy_edept(G4int, G4int, G4double);
 
     void Link_tree_branches();
 
     void Get_tree_entry(G4int);
 
-    void Refresh_data();
-
-    void Initialize(); 
+    void Refresh_edeption_data();
 
     void Fill();    
 
     void Finalize();
 
-    void Add_current_particle(G4int);
+    void Set_current_particle_edeption();
+
+    void Set_event_counter(G4int);
 
     void Inc_event_counter();
 
-    void Resize_result_vectors();
+    void Inc_particle_counter();
 
     void Get_particle_in_event_by_number(G4int, std::vector<double>&);
+
+    void Set_particle_in_output_data(std::vector<double>);
 
     G4int Get_tree_entries();
 
     G4int Get_event_counter();
+
+    G4int Get_particle_counter();
 
     G4int Get_event_size();
     

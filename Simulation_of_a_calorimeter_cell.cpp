@@ -45,28 +45,38 @@ int main(int argc, char** argv){
     runManager->Initialize();
 
     G4int n_entries = ROOTWriter::GetPointer()->Get_tree_entries();
+    G4int n_event_to_simulate = 0;
     G4cout << n_entries << "\n";
 
-   if (argc == 3){
-       particle_PDG    = atoi(argv[2]);
-       G4cout << "Particle_PDG = " << particle_PDG << G4endl;
-       runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG));
-   } else if (argc == 4){
-       particle_PDG    = atoi(argv[2]);
-       G4cout << "Particle_PDG = " << particle_PDG << G4endl;
-       particle_Energy = atof(argv[3]) * GeV;
-       G4cout <<
-           "Particle Energy = " << particle_Energy << " MeV\n" << G4endl;
-       runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
+    for (int i = 0; i < 100; ++i){
+        ROOTWriter::GetPointer()->Get_tree_entry(i);
+        n_event_to_simulate += ROOTWriter::GetPointer()->Get_event_size();
+    }
+
+    ROOTWriter::GetPointer()->Set_event_counter(0);
+
+    G4cout << n_event_to_simulate << "\n";
+
+    if (argc == 3){
+        particle_PDG    = atoi(argv[2]);
+        G4cout << "Particle_PDG = " << particle_PDG << G4endl;
+        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG));
+    } else if (argc == 4){
+        particle_PDG    = atoi(argv[2]);
+        G4cout << "Particle_PDG = " << particle_PDG << G4endl;
+        particle_Energy = atof(argv[3]) * GeV;
+        G4cout <<
+            "Particle Energy = " << particle_Energy << " MeV\n" << G4endl;
+        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
                                                             particle_Energy));
-   } else if (argc == 2){
-       particle_PDG = 11;
-       particle_Energy = 500 * MeV;
-       runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
-                                                            particle_Energy));
-   } else {
-        runManager->SetUserAction(new PrimaryGeneratorAction());
-   }
+    } else if (argc == 2){
+        particle_PDG = 11;
+        particle_Energy = 500 * MeV;
+        runManager->SetUserAction(new PrimaryGeneratorAction(particle_PDG,
+                                                                particle_Energy));
+    } else {
+            runManager->SetUserAction(new PrimaryGeneratorAction());
+    }
 
     // User action initialization
     runManager->SetUserAction(new EventAction());
@@ -93,20 +103,8 @@ int main(int argc, char** argv){
         G4String command = "/run/beamOn ";
         UImanager->ApplyCommand("/random/setSeeds 12365 1");
         // UImanager->ApplyCommand("/event/verbose 3");
-        // UImanager->ApplyCommand(command+G4String(Form("%d", n_entries)));
-        UImanager->ApplyCommand(command+G4String(Form("%d", 20)));
-        // UImanager->ApplyCommand(command+G4String(Form("%d", 10000)));
-    //     // interactive mode : define UI session
-    // #ifdef G4UI_USE
-    //     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-    // #ifdef G4VIS_USE
-    //     UImanager->ApplyCommand("/control/execute init_vis.mac"); 
-    // #else
-    //     UImanager->ApplyCommand("/control/execute init.mac"); 
-    // #endif
-    //     ui->SessionStart();
-    //     delete ui;
-    // #endif
+        // UImanager->ApplyCommand("/tracking/verbose 1");
+        UImanager->ApplyCommand(command+G4String(Form("%d", n_event_to_simulate)));
     }
   
     ROOTWriter::GetPointer()->Finalize();
