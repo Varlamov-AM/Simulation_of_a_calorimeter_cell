@@ -7,10 +7,13 @@
 #include "TH2D.h"
 #include "TH3D.h"
 #include "TFile.h"
+#include "TSystem.h"
 
 ROOTWriter* ROOTWriter::pInstance=0;
 
 void ROOTWriter::Initialize(){
+
+    gSystem->Load("libMyDict.so");
 
     if (input_chain == 0){
         input_chain = 
@@ -40,6 +43,7 @@ void ROOTWriter::Initialize(){
     calorimeter_data->SetAutoSave(0);
     calorimeter_data->Branch("cell_energy", &cell_energy_edeption);
     calorimeter_data->Branch("event_data", &event_data_to_output);
+    calorimeter_data->Print();
 
     return;
 }
@@ -125,8 +129,6 @@ void ROOTWriter::Finalize(){
     calorimeter_data->Write();
 
     delete output_file;
-    // delete input_file;
-
     return;
 }
 

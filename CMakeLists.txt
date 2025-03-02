@@ -22,6 +22,15 @@ endif()
 #include (FindROOT.cmake)
 find_package(ROOT REQUIRED)
 
+
+# Create shared library from dictionary
+add_library(MyDict SHARED ${CMAKE_CURRENT_BINARY_DIR}/Dict.cxx)
+target_include_directories(MyDict PRIVATE
+  ${ROOT_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}/include
+)
+target_link_libraries(MyDict ${ROOT_LIBRARIES})
+
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
@@ -49,7 +58,14 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(Simulation_of_a_calorimeter_cell.exe Simulation_of_a_calorimeter_cell.cpp ${sources} ${headers})
-target_link_libraries(Simulation_of_a_calorimeter_cell.exe ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+# target_link_libraries(Simulation_of_a_calorimeter_cell.exe ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+# Link both Geant4 and the dictionary library
+target_link_libraries(Simulation_of_a_calorimeter_cell.exe
+  PRIVATE
+  ${Geant4_LIBRARIES}
+  ${ROOT_LIBRARIES}
+  MyDict  # Link the dictionary library
+)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -80,5 +96,3 @@ add_custom_target(Simulation_of_a_calorimeter_cell DEPENDS Simulation_of_a_calor
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS Simulation_of_a_calorimeter_cell.exe DESTINATION .)
-
-
