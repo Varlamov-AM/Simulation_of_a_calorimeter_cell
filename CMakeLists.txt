@@ -1,98 +1,89 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.17)
 project(Simulation_of_a_calorimeter_cell)
 
 set(CMAKE_MODULE_PATH
-	${Geant4_DIR}/Modules/
-        ${CMAKE_MODULE_PATH})
+    ${Geant4_DIR}/Modules/
+    ${CMAKE_MODULE_PATH}
+)
+
+# Uncomment these if you want to enforce C++17
+# set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #----------------------------------------------------------------------------
-# Find Geant4 package, activating all available UI and Vis drivers by default
-# You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
-# to build a batch mode only executable
-#
-option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
-if(WITH_GEANT4_UIVIS)
-  find_package(Geant4 REQUIRED ui_all vis_all)
-else()
-  find_package(Geant4 REQUIRED)
+# Find ROOT and Geant4 packages
+find_package(ROOT REQUIRED)
+find_program(ROOT_rootcling_CMD rootcling)
+if(NOT ROOT_rootcling_CMD)
+    message(FATAL_ERROR "rootcling not found. Please ensure ROOT is installed correctly.")
 endif()
 
-#include (FindROOT.cmake)
-find_package(ROOT REQUIRED)
+option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
+if(WITH_GEANT4_UIVIS)
+    find_package(Geant4 REQUIRED ui_all vis_all)
+else()
+    find_package(Geant4 REQUIRED)
+endif()
 
+#----------------------------------------------------------------------------
+# ROOT Dictionary Generation
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Dict.cxx
+    COMMAND ${ROOT_rootcling_CMD}
+    ARGS -f ${CMAKE_CURRENT_BINARY_DIR}/Dict.cxx
+         -c
+         -I${CMAKE_SOURCE_DIR}/include
+         ${CMAKE_SOURCE_DIR}/include/MyDict.h
+         ${CMAKE_SOURCE_DIR}/include/LinkDef.h
+    DEPENDS ${CMAKE_SOURCE_DIR}/include/MyDict.h
+            ${CMAKE_SOURCE_DIR}/include/LinkDef.h
+)
 
 # Create shared library from dictionary
 add_library(MyDict SHARED ${CMAKE_CURRENT_BINARY_DIR}/Dict.cxx)
 target_include_directories(MyDict PRIVATE
-  ${ROOT_INCLUDE_DIRS}
-  ${CMAKE_SOURCE_DIR}/include
+    ${ROOT_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/include
 )
-target_link_libraries(MyDict ${ROOT_LIBRARIES})
+target_link_libraries(MyDict PRIVATE ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
-# Setup Geant4 include directories and compile definitions
-# Setup include directory for this project
-#
+# Setup include directories
 include(${Geant4_USE_FILE})
+include_directories(${Geant4_INCLUDE_DIRS})  # Explicitly add Geant4 include dirs
 include_directories(${PROJECT_SOURCE_DIR}/include)
-#include(FindROOT.cmake) 
-set(INCLUDE_DIRECTORIES                                                                      
-	        ${ROOT_INCLUDE_DIRS} ${AliEvent_INCLUDE_DIRS}                                                                  
-)                                                                                            
-		                                                                                             
-include_directories( ${INCLUDE_DIRECTORIES})                                                 
-		                                                                                             
-set(LINK_DIRECTORIES                                                                         
-	        ${ROOT_LIBRARY_DIR}) 
+include_directories(${ROOT_INCLUDE_DIRS})
+
+# Note: ${AliEvent_INCLUDE_DIRS} is included but undefined; remove if not needed
+# set(INCLUDE_DIRECTORIES
+#     ${ROOT_INCLUDE_DIRS} ${AliEvent_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/include
+# )
+# include_directories(${INCLUDE_DIRECTORIES})
+
+# set(LINK_DIRECTORIES ${ROOT_LIBRARY_DIR}) is unnecessary; target_link_libraries handles this
 
 #----------------------------------------------------------------------------
-# Locate sources and headers for this project
-# NB: headers are included so they will show up in IDEs
-#
+# Locate sources and headers
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Add the executable, and link it to the Geant4 libraries
-#
-add_executable(Simulation_of_a_calorimeter_cell.exe Simulation_of_a_calorimeter_cell.cpp ${sources} ${headers})
-# target_link_libraries(Simulation_of_a_calorimeter_cell.exe ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
-# Link both Geant4 and the dictionary library
-target_link_libraries(Simulation_of_a_calorimeter_cell.exe
-  PRIVATE
-  ${Geant4_LIBRARIES}
-  ${ROOT_LIBRARIES}
-  MyDict  # Link the dictionary library
+# Add the executable and link it to the libraries
+add_executable(Simulation_of_a_calorimeter_cell.exe
+    Simulation_of_a_calorimeter_cell.cpp
+    ${sources}
+    ${headers}
 )
 
-#----------------------------------------------------------------------------
-# Copy all scripts to the build directory, i.e. the directory in which we
-# build B1. This is so that we can run the executable directly because it
-# relies on these scripts being in the current working directory.
-#
-#set(SIMPLEHE_SCRIPTS
-#  init.mac
-#  init_vis.mac
-#  vis.mac
-#  )
+target_link_libraries(Simulation_of_a_calorimeter_cell.exe
+    PRIVATE
+    ${Geant4_LIBRARIES}
+    ${ROOT_LIBRARIES}
+    MyDict
+)
 
-#foreach(_script ${SIMPLEHE_SCRIPTS})
-#  configure_file(
-#    ${PROJECT_SOURCE_DIR}/${_script}
-#    ${PROJECT_BINARY_DIR}/${_script}
-#    COPYONLY
-#    )
-#endforeach()
-
-#----------------------------------------------------------------------------
-# For internal Geant4 use - but has no effect if you build this
-# example standalone
-#
-add_custom_target(Simulation_of_a_calorimeter_cell DEPENDS Simulation_of_a_calorimeter_cell.exe)
-
-#----------------------------------------------------------------------------
-# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
-#
-install(TARGETS Simulation_of_a_calorimeter_cell.exe DESTINATION .)
+# Optional: Print linked libraries for debugging
+# get_target_property(LINKED_LIBS Simulation_of_a_calorimeter_cell.exe LINK_LIBRARIES)
+# message(STATUS "Linked libraries: ${LINKED_LIBS}")
