@@ -39,7 +39,7 @@ void ROOTWriter::Initialize(){
     Link_tree_branches();
 
     calorimeter_data = new TTree("calorimeter_data", "calorimeter_data");
-    calorimeter_data->SetMaxTreeSize(10000000000);
+    calorimeter_data->SetMaxTreeSize(1000000000);
     calorimeter_data->SetAutoSave(0);
     calorimeter_data->Branch("cell_energy", &cell_energy_edeption);
     calorimeter_data->Branch("event_data", &event_data_to_output);
